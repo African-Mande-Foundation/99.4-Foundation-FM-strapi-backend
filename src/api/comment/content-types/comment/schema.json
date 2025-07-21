@@ -24,22 +24,25 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::comment.comment",
-      "inversedBy": "parent"
+      "inversedBy": "replies"
     },
     "likes": {
       "type": "json"
-    },
-    "comment": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::comment.comment",
-      "inversedBy": "replies"
     },
     "replies": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::comment.comment",
-      "mappedBy": "comment"
+      "mappedBy": "parent"
+    },
+    "article": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::article.article",
+      "inversedBy": "comments"
+    },
+    "dislikes": {
+      "type": "json"
     }
   }
 }

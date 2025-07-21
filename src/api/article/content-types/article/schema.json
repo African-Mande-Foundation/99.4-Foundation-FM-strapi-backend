@@ -29,7 +29,6 @@
       "required": false,
       "allowedTypes": [
         "images",
-        "files",
         "videos"
       ]
     },
@@ -59,7 +58,8 @@
     "comments": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::comment.comment"
+      "target": "api::comment.comment",
+      "mappedBy": "article"
     }
   }
 }
