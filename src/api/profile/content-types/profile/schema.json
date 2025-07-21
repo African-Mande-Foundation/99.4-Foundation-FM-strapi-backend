@@ -1,0 +1,39 @@
+{
+  "kind": "collectionType",
+  "collectionName": "profiles",
+  "info": {
+    "singularName": "profile",
+    "pluralName": "profiles",
+    "displayName": "Profile"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "email"
+    },
+    "uid": {
+      "type": "uid"
+    },
+    "photoUrl": {
+      "type": "string"
+    },
+    "newsletter_signup": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::newsletter-signup.newsletter-signup",
+      "mappedBy": "profile"
+    },
+    "comments": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::comment.comment",
+      "mappedBy": "profile"
+    }
+  }
+}
