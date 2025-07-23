@@ -1,1 +1,0 @@
-Add firebaseSecret Key json to config/firebaseServiceAccountKey.json
