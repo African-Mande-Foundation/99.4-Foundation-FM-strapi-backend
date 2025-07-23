@@ -1,38 +1,40 @@
-/**
- * `firebase-auth` middleware
- */
+import admin from "../config/firebase"
 
-import type { Core } from '@strapi/strapi';
-import admin from '../config/firebase';
+const protectedRoutes = [
+  '/api/articles',
+  '/api/authors',
+  '/api/categories',
+  '/api/comments',
+  '/api/newsletters',
+  '/api/newsletter-signups',
+  '/api/profiles',
+];
 
-export default (config, { strapi }: { strapi: Core.Strapi }) => {
+export default (config: any, { strapi }: { strapi: any }) => {
+  return async (ctx: any, next: () => Promise<any>) => {
+    const { path } = ctx.request;
 
-  return async (ctx, next) => {
+    const shouldProtect = protectedRoutes.some((route) => path.startsWith(route));
 
-    // Skip middleware for the api/contact-message route
-    if (ctx.request.url.includes('api/contact-message')) {
+    if (!shouldProtect) {
       return await next();
     }
 
+    const authHeader = ctx.request.headers.authorization;
 
-    const { authorization } = ctx.request.header;
-
-    if (!authorization || !authorization.startsWith('Bearer ')) {
-      return ctx.unauthorized('Missing or invalid authorization header.');
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return ctx.unauthorized('Missing or invalid Authorization header');
     }
-    const token = authorization.split(' ')[1];
+
+    const token = authHeader.split('Bearer ')[1];
 
     try {
       const decodedToken = await admin.auth().verifyIdToken(token);
       ctx.state.user = decodedToken;
-
       await next();
-    } catch (error) {
-      strapi.log.error(error);
-      return ctx.unauthorized('Invalid token.');
+    } catch (err) {
+      strapi.log.warn(`Firebase Auth failed: ${err.message}`);
+      ctx.unauthorized('Invalid or expired Firebase token');
     }
-
-
-    await next();
   };
 };

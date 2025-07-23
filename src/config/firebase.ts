@@ -1,17 +1,13 @@
 import admin from 'firebase-admin';
-import path from 'path';
 
-const serviceAccountPath = path.resolve(__dirname, '../../config/firebaseServiceAccountKey.json');
+const serviceAccount = JSON.parse(
+    Buffer.from(process.env.FIREBASE_SERVICE_ACCOUNT, 'base64').toString('utf-8')
+);
 
-try {
-    if (admin.apps.length === 0) {
-        admin.initializeApp({
-            credential: admin.credential.cert(serviceAccountPath),
-        });
-        console.log('Firebase Admin initialized successfully.');
-    }
-} catch (error) {
-    console.error('Firebase Admin initialization error:', error);
+if (!admin.apps.length) {
+    admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount),
+    });
 }
 
 export default admin;
