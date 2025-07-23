@@ -1,4 +1,4 @@
-import admin from "../config/firebase"
+import admin from "../config/firebase";
 
 const protectedRoutes = [
   '/api/articles',
@@ -13,7 +13,6 @@ const protectedRoutes = [
 export default (config: any, { strapi }: { strapi: any }) => {
   return async (ctx: any, next: () => Promise<any>) => {
     const { path } = ctx.request;
-
     const shouldProtect = protectedRoutes.some((route) => path.startsWith(route));
 
     if (!shouldProtect) {
@@ -23,18 +22,18 @@ export default (config: any, { strapi }: { strapi: any }) => {
     const authHeader = ctx.request.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return ctx.unauthorized('Missing or invalid Authorization header');
+      return ctx.unauthorized('Unauthorized: No  token provided');
     }
 
-    const token = authHeader.split('Bearer ')[1];
+    const token = authHeader.split(' ')[1];
 
     try {
       const decodedToken = await admin.auth().verifyIdToken(token);
       ctx.state.user = decodedToken;
-      await next();
+      return await next();
     } catch (err) {
       strapi.log.warn(`Firebase Auth failed: ${err.message}`);
-      ctx.unauthorized('Invalid or expired Firebase token');
+      return ctx.unauthorized('Invalid or expired Firebase token');
     }
   };
 };

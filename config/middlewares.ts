@@ -9,5 +9,8 @@ export default [
   'strapi::session',
   'strapi::favicon',
   'strapi::public',
-  'global::firebase-auth',
+  {
+    name: 'global::firebase-auth',
+    config: {},
+  },
 ];
