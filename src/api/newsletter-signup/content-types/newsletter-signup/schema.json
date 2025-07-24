@@ -22,6 +22,12 @@
       "relation": "oneToOne",
       "target": "api::profile.profile",
       "inversedBy": "newsletter_signup"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "newsletter_signup"
     }
   }
 }
