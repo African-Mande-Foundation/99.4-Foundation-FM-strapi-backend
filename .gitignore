@@ -5,6 +5,7 @@
 config/firebaseServiceAccountKey.json
 
 
+.tmp/data.db
 
 ############################
 # OS X
