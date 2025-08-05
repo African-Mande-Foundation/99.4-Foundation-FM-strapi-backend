@@ -17,12 +17,7 @@
     "SubscribedAt": {
       "type": "datetime"
     },
-    "profile": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::profile.profile",
-      "inversedBy": "newsletter_signup"
-    },
+    
     "user": {
       "type": "relation",
       "relation": "oneToOne",
