@@ -507,9 +507,9 @@ export interface ApiCommentComment extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     parent: Schema.Attribute.Relation<'manyToOne', 'api::comment.comment'>;
-    profile: Schema.Attribute.Relation<'manyToOne', 'api::profile.profile'>;
     publishedAt: Schema.Attribute.DateTime;
     replies: Schema.Attribute.Relation<'oneToMany', 'api::comment.comment'>;
+    repliesCount: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -573,7 +573,6 @@ export interface ApiNewsletterSignupNewsletterSignup
       'api::newsletter-signup.newsletter-signup'
     > &
       Schema.Attribute.Private;
-    profile: Schema.Attribute.Relation<'oneToOne', 'api::profile.profile'>;
     publishedAt: Schema.Attribute.DateTime;
     SubscribedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
@@ -611,42 +610,6 @@ export interface ApiNewsletterNewsletter extends Struct.CollectionTypeSchema {
     media: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     publishedAt: Schema.Attribute.DateTime;
     Title: Schema.Attribute.String;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-  };
-}
-
-export interface ApiProfileProfile extends Struct.CollectionTypeSchema {
-  collectionName: 'profiles';
-  info: {
-    displayName: 'Profile';
-    pluralName: 'profiles';
-    singularName: 'profile';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    comments: Schema.Attribute.Relation<'oneToMany', 'api::comment.comment'>;
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    email: Schema.Attribute.Email;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::profile.profile'
-    > &
-      Schema.Attribute.Private;
-    name: Schema.Attribute.String;
-    newsletter_signup: Schema.Attribute.Relation<
-      'oneToOne',
-      'api::newsletter-signup.newsletter-signup'
-    >;
-    photoUrl: Schema.Attribute.String;
-    publishedAt: Schema.Attribute.DateTime;
-    uid: Schema.Attribute.UID;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1174,7 +1137,6 @@ declare module '@strapi/strapi' {
       'api::contact-message.contact-message': ApiContactMessageContactMessage;
       'api::newsletter-signup.newsletter-signup': ApiNewsletterSignupNewsletterSignup;
       'api::newsletter.newsletter': ApiNewsletterNewsletter;
-      'api::profile.profile': ApiProfileProfile;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

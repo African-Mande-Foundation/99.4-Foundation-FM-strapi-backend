@@ -14,12 +14,7 @@
     "Content": {
       "type": "text"
     },
-    "profile": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::profile.profile",
-      "inversedBy": "comments"
-    },
+    
     "parent": {
       "type": "relation",
       "relation": "manyToOne",
@@ -49,6 +44,10 @@
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
       "inversedBy": "comments"
+    },
+    "repliesCount": {
+      "type": "integer",
+      "default": 0
     }
   }
 }

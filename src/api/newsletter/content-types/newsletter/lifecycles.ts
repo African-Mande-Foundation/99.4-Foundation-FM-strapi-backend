@@ -2,7 +2,6 @@ import crypto from 'crypto';
 
 export default {
   async afterCreate(event) {
-    console.log('✅ Newsletter afterCreate lifecycle triggered');
 
     const { result } = event;
 
@@ -11,10 +10,9 @@ export default {
       fields: ['email'],
     });
 
-    const subscribers = signups.filter(s => !!s.email); // filter out null emails
+    const subscribers = signups.filter(s => !!s.email);
 
     if (subscribers.length === 0) {
-      console.log('⚠️ No subscribers to send to.');
       return;
     }
 
@@ -48,9 +46,8 @@ export default {
 
     try {
       await Promise.all(emailPromises);
-      console.log(`✅ Newsletter sent to ${subscribers.length} subscribers`);
     } catch (err) {
-      console.error('❌ Error sending newsletter emails:', err);
+      console.error('Error sending newsletter emails:', err);
     }
   },
 };
