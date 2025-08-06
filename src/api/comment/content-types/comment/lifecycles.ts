@@ -23,7 +23,7 @@ const updateParentRepliesCount = async (parentId: number) => {
       data: { repliesCount },
     });
   } catch (err) {
-    console.error(`❌ Failed to update repliesCount for parent ID ${parentId}:`, err);
+    console.error(`Failed to update repliesCount for parent ID ${parentId}:`, err);
   }
 };
 

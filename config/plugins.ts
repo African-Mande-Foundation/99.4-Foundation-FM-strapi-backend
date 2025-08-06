@@ -5,12 +5,11 @@ export default ({ env }) => ({
       providerOptions: {
         host: env('MAIL_HOST', 'smtp.gmail.com'),
         port: env.int('MAIL_PORT', 587),
-        secure: false, // true for 465, false for other ports
+        secure: false, 
         auth: {
           user: env('MAIL_USERNAME'),
           pass: env('MAIL_PASSWORD'),
         },
-        // Add this for Gmail if you get TLS errors
         tls: {
           rejectUnauthorized: false
         }
