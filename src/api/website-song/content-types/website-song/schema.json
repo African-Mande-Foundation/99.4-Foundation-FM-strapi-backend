@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "website_songs",
+  "info": {
+    "singularName": "website-song",
+    "pluralName": "website-songs",
+    "displayName": "Website-song"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "songs": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "audios"
+      ]
+    }
+  }
+}
