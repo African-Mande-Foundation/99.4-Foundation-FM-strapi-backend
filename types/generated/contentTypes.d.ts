@@ -616,6 +616,36 @@ export interface ApiNewsletterNewsletter extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiPodcastPodcast extends Struct.CollectionTypeSchema {
+  collectionName: 'podcasts';
+  info: {
+    displayName: 'Podcast';
+    pluralName: 'podcasts';
+    singularName: 'podcast';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::podcast.podcast'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    thumbnailurl: Schema.Attribute.Text & Schema.Attribute.Required;
+    title: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    youtubeurl: Schema.Attribute.Text & Schema.Attribute.Required;
+  };
+}
+
 export interface ApiWebsiteSongWebsiteSong extends Struct.CollectionTypeSchema {
   collectionName: 'website_songs';
   info: {
@@ -1167,6 +1197,7 @@ declare module '@strapi/strapi' {
       'api::contact-message.contact-message': ApiContactMessageContactMessage;
       'api::newsletter-signup.newsletter-signup': ApiNewsletterSignupNewsletterSignup;
       'api::newsletter.newsletter': ApiNewsletterNewsletter;
+      'api::podcast.podcast': ApiPodcastPodcast;
       'api::website-song.website-song': ApiWebsiteSongWebsiteSong;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
