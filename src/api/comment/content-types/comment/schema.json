@@ -14,15 +14,11 @@
     "Content": {
       "type": "text"
     },
-    
     "parent": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::comment.comment",
       "inversedBy": "replies"
-    },
-    "likes": {
-      "type": "json"
     },
     "replies": {
       "type": "relation",
@@ -36,9 +32,6 @@
       "target": "api::article.article",
       "inversedBy": "comments"
     },
-    "dislikes": {
-      "type": "json"
-    },
     "user": {
       "type": "relation",
       "relation": "manyToOne",
@@ -48,6 +41,12 @@
     "repliesCount": {
       "type": "integer",
       "default": 0
+    },
+    "reactions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::comment-reaction.comment-reaction",
+      "mappedBy": "comment"
     }
   }
 }
