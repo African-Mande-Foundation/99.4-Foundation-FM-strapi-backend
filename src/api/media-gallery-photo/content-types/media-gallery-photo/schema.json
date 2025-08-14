@@ -1,0 +1,36 @@
+{
+  "kind": "collectionType",
+  "collectionName": "media_gallery_photos",
+  "info": {
+    "singularName": "media-gallery-photo",
+    "pluralName": "media-gallery-photos",
+    "displayName": "Media Gallery Photo"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "category": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::media-gallery-category.media-gallery-category",
+      "inversedBy": "media_gallery_photos"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "alt": {
+      "type": "string"
+    }
+  }
+}

@@ -592,6 +592,77 @@ export interface ApiContactMessageContactMessage
   };
 }
 
+export interface ApiMediaGalleryCategoryMediaGalleryCategory
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'media_gallery_categories';
+  info: {
+    displayName: 'Media Gallery Category';
+    pluralName: 'media-gallery-categories';
+    singularName: 'media-gallery-category';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    backgroundImage: Schema.Attribute.Media<'images'> &
+      Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::media-gallery-category.media-gallery-category'
+    > &
+      Schema.Attribute.Private;
+    media_gallery_photos: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::media-gallery-photo.media-gallery-photo'
+    >;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiMediaGalleryPhotoMediaGalleryPhoto
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'media_gallery_photos';
+  info: {
+    displayName: 'Media Gallery Photo';
+    pluralName: 'media-gallery-photos';
+    singularName: 'media-gallery-photo';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    alt: Schema.Attribute.String;
+    category: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::media-gallery-category.media-gallery-category'
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    image: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::media-gallery-photo.media-gallery-photo'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiNewsletterSignupNewsletterSignup
   extends Struct.CollectionTypeSchema {
   collectionName: 'newsletter_signups';
@@ -1273,6 +1344,8 @@ declare module '@strapi/strapi' {
       'api::comment-reaction.comment-reaction': ApiCommentReactionCommentReaction;
       'api::comment.comment': ApiCommentComment;
       'api::contact-message.contact-message': ApiContactMessageContactMessage;
+      'api::media-gallery-category.media-gallery-category': ApiMediaGalleryCategoryMediaGalleryCategory;
+      'api::media-gallery-photo.media-gallery-photo': ApiMediaGalleryPhotoMediaGalleryPhoto;
       'api::newsletter-signup.newsletter-signup': ApiNewsletterSignupNewsletterSignup;
       'api::newsletter.newsletter': ApiNewsletterNewsletter;
       'api::podcast.podcast': ApiPodcastPodcast;
