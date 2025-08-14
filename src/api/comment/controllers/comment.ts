@@ -48,5 +48,42 @@ export default factories.createCoreController(
 
       return { data: enriched, meta };
     },
+
+    // New custom method for deleting own comments
+    async deleteOwn(ctx) {
+      const { id } = ctx.params; // Get the comment ID from the URL parameters
+      const userId = ctx.state.user?.id; // Get the authenticated user's ID
+
+      if (!userId) {
+        return ctx.unauthorized("You are not authenticated.");
+      }
+
+      try {
+        // Find the comment
+        const comment = await strapi.db.query("api::comment.comment").findOne({
+          where: { id: id },
+          populate: ["user"], // Populate the user to check ownership
+        });
+
+        if (!comment) {
+          return ctx.notFound("Comment not found.");
+        }
+
+        // Check if the authenticated user is the owner of the comment
+        if (comment.user.id !== userId) {
+          return ctx.forbidden("You are not allowed to delete this comment.");
+        }
+
+        // Delete the comment
+        await strapi.db.query("api::comment.comment").delete({
+          where: { id: id },
+        });
+
+        return ctx.send({ message: "Comment deleted successfully." });
+      } catch (error) {
+        strapi.log.error(`Error deleting comment: ${error.message}`);
+        return ctx.badRequest("Failed to delete comment.");
+      }
+    },
   }),
 );
