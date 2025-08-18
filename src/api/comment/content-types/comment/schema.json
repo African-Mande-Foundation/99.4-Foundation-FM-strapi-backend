@@ -47,6 +47,9 @@
       "relation": "oneToMany",
       "target": "api::comment-reaction.comment-reaction",
       "mappedBy": "comment"
+    },
+    "Approved": {
+      "type": "boolean"
     }
   }
 }

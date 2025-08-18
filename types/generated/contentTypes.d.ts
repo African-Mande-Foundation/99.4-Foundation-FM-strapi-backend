@@ -496,8 +496,7 @@ export interface ApiCommentReactionCommentReaction
     draftAndPublish: true;
   };
   attributes: {
-    comment: Schema.Attribute.Relation<'manyToOne', 'api::comment.comment'> &
-      Schema.Attribute.Required;
+    comment: Schema.Attribute.Relation<'manyToOne', 'api::comment.comment'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -532,6 +531,7 @@ export interface ApiCommentComment extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    Approved: Schema.Attribute.Boolean;
     article: Schema.Attribute.Relation<'manyToOne', 'api::article.article'>;
     Content: Schema.Attribute.Text;
     createdAt: Schema.Attribute.DateTime;

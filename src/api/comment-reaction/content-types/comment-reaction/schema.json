@@ -13,7 +13,10 @@
   "attributes": {
     "type": {
       "type": "enumeration",
-      "enum": ["like", "dislike"],
+      "enum": [
+        "like",
+        "dislike"
+      ],
       "required": true
     },
     "user": {
@@ -26,7 +29,7 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::comment.comment",
-      "required": true
+      "inversedBy": "reactions"
     }
   }
 }
