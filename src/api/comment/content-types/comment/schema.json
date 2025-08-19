@@ -12,7 +12,10 @@
   "pluginOptions": {},
   "attributes": {
     "Content": {
-      "type": "text"
+      "type": "text",
+      "required": true,
+      "minLength": 1,
+      "maxLength": 500
     },
     "parent": {
       "type": "relation",

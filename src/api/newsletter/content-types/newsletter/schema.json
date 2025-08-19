@@ -11,18 +11,17 @@
   },
   "pluginOptions": {},
   "attributes": {
+    "eventEmitted": {
+      "type": "boolean",
+      "default": false
+    },
     "Title": {
       "type": "string"
     },
     "media": {
       "type": "media",
       "multiple": false,
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ]
+      "allowedTypes": ["images", "files", "videos", "audios"]
     },
     "author": {
       "type": "relation",

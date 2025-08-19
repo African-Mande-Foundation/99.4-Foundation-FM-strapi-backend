@@ -1,23 +1,35 @@
+import sanitizeHtml from "sanitize-html";
+
 interface Comment {
   id: number;
-  parent?: {
-    id: number;
-  };
+  parent?: { id: number };
 }
+
+type CommentData = { Content?: unknown };
+
+
+const SANITIZE_OPTS: sanitizeHtml.IOptions = {
+  allowedTags: [],            
+  allowedAttributes: {},      
+};
+
+// Normalize & sanitize to plain text
+const cleanContent = (value: unknown): string => {
+  const s = typeof value === "string" ? value : String(value ?? "");
+  const stripped = sanitizeHtml(s, SANITIZE_OPTS);
+  // Collapse whitespace & trim 
+  return stripped.replace(/\s+/g, " ").trim();
+};
 
 // Utility function to update the repliesCount of a parent comment
 const updateParentRepliesCount = async (parentId: number) => {
   if (!parentId) return;
 
   try {
-    // Count the number of replies to this parent
     const repliesCount = await strapi.db.query('api::comment.comment').count({
-      where: {
-        parent: parentId,
-      },
+      where: { parent: parentId },
     });
 
-    // Update the parent comment's repliesCount field
     await strapi.db.query('api::comment.comment').update({
       where: { id: parentId },
       data: { repliesCount },
@@ -28,11 +40,23 @@ const updateParentRepliesCount = async (parentId: number) => {
 };
 
 export default {
-  // Triggered after a comment is created
+  
+  beforeCreate(event: { params: { data: CommentData } }) {
+    if (event?.params?.data?.Content != null) {
+      event.params.data.Content = cleanContent(event.params.data.Content);
+    }
+  },
+
+  beforeUpdate(event: { params: { data: CommentData } }) {
+    if (event?.params?.data?.Content != null) {
+      event.params.data.Content = cleanContent(event.params.data.Content);
+    }
+  },
+
+  
   async afterCreate(event: { result: Comment }) {
     const { result } = event;
 
-    // Fetch the parent ID (safely)
     const comment = await strapi.db.query('api::comment.comment').findOne({
       where: { id: result.id },
       populate: { parent: true },
@@ -43,7 +67,6 @@ export default {
     }
   },
 
-  // Triggered after a comment is updated
   async afterUpdate(event: { result: Comment }) {
     const { result } = event;
 
@@ -57,7 +80,6 @@ export default {
     }
   },
 
-  // Triggered after a comment is deleted
   async afterDelete(event: { result: Comment }) {
     const { result } = event;
 
@@ -66,9 +88,7 @@ export default {
     }
   },
 
-  // Triggered after many comments are deleted at once
   async afterDeleteMany(event: { result: Comment[] }) {
-
     const uniqueParentIds = new Set<number>();
 
     for (const deletedComment of event.result) {

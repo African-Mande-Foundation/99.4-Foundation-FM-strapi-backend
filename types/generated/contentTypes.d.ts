@@ -533,7 +533,12 @@ export interface ApiCommentComment extends Struct.CollectionTypeSchema {
   attributes: {
     Approved: Schema.Attribute.Boolean;
     article: Schema.Attribute.Relation<'manyToOne', 'api::article.article'>;
-    Content: Schema.Attribute.Text;
+    Content: Schema.Attribute.Text &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 500;
+        minLength: 1;
+      }>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -719,6 +724,7 @@ export interface ApiNewsletterNewsletter extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    eventEmitted: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
