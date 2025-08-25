@@ -23,18 +23,31 @@ export default {
         }
 
         // Fetch subscribers
-        const signups = await knex("newsletter_signups").select("email");
+        const signups = await knex("newsletter_signups").distinct("email"); 
+
         const subscribers = signups.filter((s) => !!s.email);
+
         if (subscribers.length === 0) {
           strapi.log.info("No subscribers found.");
           return;
         }
-        console.log(subscribers.length)
+
+       
+
         // Fetch articles
-        const articles = await knex("articles")
-          .orderBy("created_at", "desc")
+        const articles = await knex("articles as a")
+          .leftJoin("articles_author_lnk as aal", "a.id", "aal.article_id")
+          .leftJoin("authors as au", "aal.author_id", "au.id")
+          .distinct(
+            "a.document_id",
+            "a.title",
+            "a.excerpt",
+            "au.name as author_name",
+          )
+          .orderBy("a.created_at", "desc")
           .limit(5);
 
+       
         // Send emails asynchronously
         setImmediate(async () => {
           try {
@@ -42,9 +55,7 @@ export default {
               .service("api::newsletter.newsletter")
               .sendEmails({ newsletter, subscribers, articles, reason });
 
-            strapi.log.info(
-              `✅ Newsletter ${id} sent (trigger: ${reason || "unknown"})`,
-            );
+           
           } catch (err) {
             strapi.log.error(
               "❌ Newsletter send failed in eventHub listener:",
@@ -58,6 +69,6 @@ export default {
     };
 
     strapi.eventHub.on("newsletter.dispatch", onNewsletterDispatch);
-    strapi.log.info("✅ eventHub listener registered: newsletter.dispatch");
+    
   },
 };
