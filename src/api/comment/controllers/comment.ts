@@ -37,8 +37,18 @@ export default factories.createCoreController(
             currentUserReaction = reaction?.type || null;
           }
 
+          const safeUser = comment.user
+            ? {
+                id: comment.user.id,
+                documentId: comment.user.documentId,
+                username: comment.user.username,
+                photoUrl: comment.user.photoUrl,
+              }
+            : null;
+
           return {
             ...comment,
+            user: safeUser,
             likesCount,
             dislikesCount,
             currentUserReaction,
